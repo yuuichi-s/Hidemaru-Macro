@@ -1,10 +1,10 @@
-Python�X�N���v�g�����s����G�ۃ}�N��
+Pythonスクリプトを実行する秀丸マクロ
 ==========
 
-* ���̃}�N�������s����ƁA�ҏW���̓��e�� Python �X�N���v�g�Ƃ��Ď��s����܂��B
-* �}�N���̐擪�ŁA�g�p���� Python �C���^�v���^�ƃR�}���h���C���I�v�V�������w��ł��܂��B
-* �o�͐���ȉ�����I���ł��܂��B
- * �A�E�g�v�b�g�g
- * �V�����E�B���h�E
-* python.exe�ւ̃p�X���ʂ��Ă���K�v������܂��B
-* ���O�R���p�C�����s���ꍇ�́A#compile��1��ݒ肵�Ă��������B���s���Ȃ��ŃR���p�C�����ʂ邩�`�F�b�N���܂��B
+* このマクロを実行すると、編集中の内容が Python スクリプトとして実行されます。
+* マクロの先頭で、使用する Python インタプリタとコマンドラインオプションを指定できます。
+* 出力先を以下から選択できます。
+ * アウトプット枠
+ * 新しいウィンドウ
+* python.exeへのパスが通っている必要があります。
+* 事前コンパイルを行う場合は、#compileに1を設定してください。実行しないでコンパイルが通るかチェックします。

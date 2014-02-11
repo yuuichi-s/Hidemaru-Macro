@@ -1,45 +1,45 @@
 /*
- * Python�X�N���v�g�����s����G�ۃ}�N��
+ * Pythonスクリプトを実行する秀丸マクロ
  *
  * Ver.1.0 (2014-02-11)
  *
- * �@�\
- * - ���̃}�N�������s����ƁA�ҏW���̓��e�� Python �X�N���v�g�Ƃ��Ď��s����܂��B
- * - �}�N���̐擪�ŁA�g�p���� Python �C���^�v���^�ƃR�}���h���C���I�v�V�������w��ł��܂��B
- * - �o�͐���ȉ�����I���ł��܂��B
- *   - �A�E�g�v�b�g�g
- *   - �V�����E�B���h�E
- * - python.exe�ւ̃p�X���ʂ��Ă���K�v������܂��B
- * - ���O�R���p�C�����s���ꍇ�́A#compile��1��ݒ肵�Ă��������B
- *   ���s���Ȃ��ŃR���p�C�����ʂ邩�`�F�b�N���܂��B
+ * 機能
+ * - このマクロを実行すると、編集中の内容が Python スクリプトとして実行されます。
+ * - マクロの先頭で、使用する Python インタプリタとコマンドラインオプションを指定できます。
+ * - 出力先を以下から選択できます。
+ *   - アウトプット枠
+ *   - 新しいウィンドウ
+ * - python.exeへのパスが通っている必要があります。
+ * - 事前コンパイルを行う場合は、#compileに1を設定してください。
+ *   実行しないでコンパイルが通るかチェックします。
  *
  * yuuichi_s
  */
 
-// Python�C���^�v���^
+// Pythonインタプリタ
 $python = "python";
 
-// �R�}���h���C���I�v�V����
+// コマンドラインオプション
 $opt = "";
 
-// �o�͐�
-// 0: �R�}���h�v�����v�g
-// 1: �A�E�g�v�b�g�g
-// 2: �V�����E�B���h�E
+// 出力先
+// 0: コマンドプロンプト
+// 1: アウトプット枠
+// 2: 新しいウィンドウ
 #output = 1;
 
-// ���s����
-// 0: ���s
-// 1: �R���p�C��
+// 実行分類
+// 0: 実行
+// 1: コンパイル
 #compile = 0;
 
 if (#compile == 1) {
 	$opt = "-m py_compile";
 }
 
-// (����)�̏ꍇ�ɂ����̂܂܎��s�ł���悤�ɂ���
+// (無題)の場合にもそのまま実行できるようにする
 if (filetype == "new") {
-	// �ҏW���e���擾
+	// 編集内容を取得
 	disabledraw;
 		call SAVE_CURSOR;
 
@@ -50,31 +50,31 @@ if (filetype == "new") {
 		call RESTORE_CURSOR;
 	enabledraw screentopy;
 
-	// �X�e���X���[�h�̃E�B���h�E�𗘗p���A�ҏW���e���t�@�C���ɕۑ�
+	// ステルスモードのウィンドウを利用し、編集内容をファイルに保存
 	#hwnd_orig = hidemaruhandle(0);
 	openfile "/h";
 	#hwnd_work = hidemaruhandle(0);
 
-	// ���݂̕ҏW���e��ۑ�����e���|�����[�t�@�C��
+	// 現在の編集内容を保存するテンポラリーファイル
 	$temp_file = getenv("TEMP") + "\\" + "current_contents.py";
 
 	setencode #encode;
 	insert $current_contents;
 	saveas $temp_file;
 
-	setactivehidemaru #hwnd_orig;	// ���̃E�B���h�E�ɖ߂�
-	closehidemaruforced #hwnd_work;	// ��ƃE�B���h�E�����
+	setactivehidemaru #hwnd_orig;	// 元のウィンドウに戻る
+	closehidemaruforced #hwnd_work;	// 作業ウィンドウを閉じる
 
 	call EXEC, $temp_file;
 } else if (leftstr(filetype, 1) == ".") {
-	// ���݂̃^�u���ugrep���ʁv��u���s���ʁv�łȂ���΁A�㏑���ۑ����Ă�����s
+	// 現在のタブが「grep結果」や「実行結果」でなければ、上書き保存してから実行
 	save;
 	call EXEC, "%f";
 }
 
 endmacro;
 
-// �J�[�\���ʒu�Ɣ͈͑I���̏�Ԃ��O���[�o���ϐ� #_cursor_info �ɕۑ�����B
+// カーソル位置と範囲選択の状態をグローバル変数 #_cursor_info に保存する。
 SAVE_CURSOR:
 	#_cursor_info[0] = selecting;
 	#_cursor_info[1] = rectselecting;
@@ -84,7 +84,7 @@ SAVE_CURSOR:
 	#_cursor_info[5] = y;
 return;
 
-// #_cursor_info �̒l����A�J�[�\���ʒu�Ɣ͈͑I���̏�Ԃ𕜌�����B
+// #_cursor_info の値から、カーソル位置と範囲選択の状態を復元する。
 RESTORE_CURSOR:
 	##selecting = #_cursor_info[0];
 	##rectselecting = #_cursor_info[1];
